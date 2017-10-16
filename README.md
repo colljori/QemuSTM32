@@ -6,8 +6,10 @@ Modélisation SystemC-TLM d’IP et intégration système matériel/logiciel
 
 Pour libyaml >= 0.5.3: 
 * DL sur la release sur le site/git
-* modifier Findyaml-cpp.cmake dans rabbits pour qu'il aille chercher dans le dossier où il y a la nouvelle install. Le plus simple "export YAMLCPP_DIR=...". 
-* Rajouter set(YAMLCPP_DIR $ENV{YAMLCPP_DIR} ) dans .cmake
+* cmake -DBUILD_SHARED_LIBS=ON
+* cd build && make .. 
+* ajouter la variable YAMLCPP_DIR dans l'environnement ( export ... )
+* modifier Findyaml-cpp.cmake dans rabbits. Ajouter set(YAMLCPP_DIR $ENV{YAMLCPP_DIR}) après endif et dans find_fibrary ajouter $ENV{YAMLCPP_DIR}/build.
 
 
 Pour libfdt >= 1.4.2, 
