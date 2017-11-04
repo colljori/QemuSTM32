@@ -1,0 +1,6 @@
+component:
+  implementation: rpi-gpio
+  type: bcm2835-gpio
+  class: raspberry_gpio
+  include: raspberry_gpio.h
+  description: Raspberry PI GPIO

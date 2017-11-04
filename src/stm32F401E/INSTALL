@@ -1,0 +1,10 @@
+To install it inside rabbit ( not 100% accurate ):
+ - In rabbit folder 
+   - modify line 381 in "repos": add "stm32F401E;" to prefix
+   - ./repos setup
+   - make
+   - ./repos create-plat-symlink stm32F401E
+ - Link this stm32F401E folder inside rabbit folder. ln -s .. 
+
+
+ 

@@ -15,3 +15,4 @@ Pour libyaml >= 0.5.3:
 Pour libfdt >= 1.4.2, 
 * cd sc-qemu 
 * git submodule update --init dtc
+
