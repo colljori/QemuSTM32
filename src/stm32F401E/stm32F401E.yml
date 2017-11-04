@@ -5,7 +5,7 @@ platforms:
       bus:
         type: simple-bus
       cpu:
-        type: cortex-m4
+        type: cpu-arm-cortex-m4
         
       mem:
         type: memory
