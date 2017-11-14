@@ -30,25 +30,30 @@ OC=$(CROSS_COMPILE)objcopy
 OD=$(CROSS_COMPILE)objdump
 ECHO = echo
 
-SRC = $(wildcard ../lib/src/*.c) 
+LIB_DIR= ../../lib
+
+SRC = $(wildcard $(LIB_DIR)/src/*.c) 
 SRC += start.c
 
-INCLUDE_DIR=../lib/include
+ASRC = vectors.s
+
+INCLUDE_DIR=$(LIB_DIR)/include
 
 # flags
 CC_FLAGS= -mcpu=cortex-m4 -mthumb -g  -I$(INCLUDE_DIR)
 AS_FLAGS= -mcpu=cortex-m4 -mthumb -g
-OBC_FLAGS = -O binary
+OC_FLAGS = -O binary
 
 
 # sources converted to objs
-OBJ = $(SRC:%.c=%.o)
+OBJ = $(SRC:%.c=%.o) $(ASRC:%.s=%.o)
+
 
 # generate elf and bin
 all: $(OUTPUT).elf $(OUTPUT).bin 
 
 # generate elf file from objs
-$(OUTPUT).elf: ldscript.ld $(OBJ)
+$(OUTPUT).elf: ldscript.ld $(OBJ) 
 	@ $(ECHO) ---------------------    Linking   ---------------------
 	$(LD) -T $< $(filter-out $<,$^) -o $@
 
@@ -58,13 +63,13 @@ $(OUTPUT).bin: $(OUTPUT).elf
 	$(OC) $(OC_FLAGS) $< $@
 
 
-# compile all sources
+# compile all C-sources
 %.o : %.c
 	@ $(ECHO) --------------------- Compiling $< ---------------------
 	$(CC) -c $(CC_FLAGS) $< -o $@
 
-# compile vector.s
-vectors.o : vectors.s
+# compile all Assembly sources
+%.o : %.s
 	@ $(ECHO) --------------------- Compiling $< ---------------------
 	$(AS) $(AS_FLAGS) $< -o $@
 

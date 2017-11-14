@@ -20,8 +20,8 @@
 /* No much to include yet :) */
 
 #include <stdint.h>
-#include <timer.h>
-#include <gpio.h>
+/* #include <timer.h> */
+/* #include <gpio.h> */
 
 /* Strange declarations as the addresses of these contain the values
  * computed into the ldscript
@@ -39,7 +39,9 @@ void __start(void)
    /* Go thru SRAM, between the end of bss and the stack bottom, and poke a value */
    register uint32_t *sp;
    __asm__ volatile ("mrs %0, msp" : "=r"(sp));
-   
-    
+
+   /* tim_tbase_init_t *init; */
+   /* TIM_TimeBaseStructInit(init); */
+   /* TIM_TimeBaseInit(TIM2, init);  */
    
 }

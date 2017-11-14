@@ -42,7 +42,7 @@ INCLUDE_DIR=$(LIB_DIR)/include
 # flags
 CC_FLAGS= -mcpu=cortex-m4 -mthumb -g  -I$(INCLUDE_DIR)
 AS_FLAGS= -mcpu=cortex-m4 -mthumb -g
-OBC_FLAGS = -O binary
+OC_FLAGS = -O binary
 
 
 # sources converted to objs
