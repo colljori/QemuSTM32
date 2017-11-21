@@ -209,8 +209,11 @@ TIM1_UP_TIM10_handler:      b TIM1_UP_TIM10_handler      @ self loop for now
 TIM1_TRG_COM_TIM11_handler: b TIM1_TRG_COM_TIM11_handler @ self loop for now
 .thumb_func
 TIM1_CC_handler:            b TIM1_CC_handler            @ self loop for now
+
+
 .thumb_func
-TIM2_handler:               b TIM2_handler               @ self loop for now
+TIM2_handler:               
+	bl _TIM2_handler               @ self loop for now
 .thumb_func
 TIM3_handler:               b TIM3_handler               @ self loop for now
 .thumb_func

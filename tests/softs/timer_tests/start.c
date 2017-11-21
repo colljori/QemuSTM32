@@ -19,9 +19,10 @@
 
 /* No much to include yet :) */
 
+#include <stdlib.h>
+#include <stdio.h>
 #include <stdint.h>
-/* #include <timer.h> */
-/* #include <gpio.h> */
+#include <timer.h>
 
 /* Strange declarations as the addresses of these contain the values
  * computed into the ldscript
@@ -40,8 +41,20 @@ void __start(void)
    register uint32_t *sp;
    __asm__ volatile ("mrs %0, msp" : "=r"(sp));
 
-   /* tim_tbase_init_t *init; */
-   /* TIM_TimeBaseStructInit(init); */
-   /* TIM_TimeBaseInit(TIM2, init);  */
    
+   tim_t *tim = TIM2;
+
+   tim->PSC = 0x0000;
+   tim->EGR = 0x1;
+   tim->CR1 = (uint32_t)0x001; //enable and downward
+   tim->DIER = 0x1;
+   tim->ARR = (uint32_t)0xffffffff;
+   tim->CNT = 0; 
+
+}
+
+
+void _TIM2_handler(void){
+	uint32_t *p = (uint32_t*)0x20000000;
+	*p = 0x0C; 
 }
