@@ -40,6 +40,7 @@ void __start(void)
    register uint32_t *sp;
    __asm__ volatile ("mrs %0, msp" : "=r"(sp));
    
-    
+
+   /* Tests instruction */ 
    
 }
