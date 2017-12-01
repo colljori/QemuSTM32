@@ -48,7 +48,7 @@ void __start(void)
     */
    volatile uint32_t* p = (uint32_t*) 0x40020000;// adresse de base port A
    p += 5; //base+5 = registre ODR (Output Data Register)
-   *p = (uint32_t) 5; // écriture de 5 dans registre IDR
+   *p = (uint32_t) 5; // écriture de 5 dans registre ODR
    
    /* lecture avquelconque pour la config l'output 
     * (crée un appelle à la config de MODER)
