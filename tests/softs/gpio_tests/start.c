@@ -42,22 +42,19 @@ void __start(void)
 
 
    /* Tests instruction */
+   /*
+    * ________TEST LECTURE/ECRITURE SUR ODR________
+    *
+    */
    /* Ecriture de la valeur 5 sur l'entrée du port A
     * puis lecture de cette valeur.
-    * MODER déjà en input mode (valeur du reset)
     */
-   volatile uint32_t* p = (uint32_t*) 0x40020000;// adresse de base port A
+   volatile uint32_t* p = (uint32_t*) 0x40020000;//addr base port A (MODER)
+   *p = 0x00000000; // mode input
    p += 5; //base+5 = registre ODR (Output Data Register)
-   *p = (uint32_t) 5; // écriture de 5 dans registre ODR
-   
-   /* lecture avquelconque pour la config l'output 
-    * (crée un appelle à la config de MODER)
-    */
+   *p = (uint32_t) 5; // écriture de 5 dans registre ODR 
    p = (uint32_t*) 0x40020000;// adresse de base port A
-   volatile uint32_t q = *p;
-   /* test de la lecture dans q, supposée renvoyer 5 
-    * (valeur écrite dans ODR avant)
-    */
+   *p = (uint32_t) 0b0101010101010101; // mode ouput
    p += 5;
-   q = *p;
+   volatile uint32_t q = *p;
 }
