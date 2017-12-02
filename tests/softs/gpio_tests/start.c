@@ -57,4 +57,10 @@ void __start(void)
    *p = (uint32_t) 0b0101010101010101; // mode ouput
    p += 5;
    volatile uint32_t q = *p;
+   /* vérification bon fonctionnement read ODR
+    */
+   p = (uint32_t*) 0x40020000;// adresse de base port A
+   *p = (uint32_t) 0b0101010101010111; // erreur sur le 2ème bit
+   p += 5;
+   q = *p; // valeur attendu != 5
 }
