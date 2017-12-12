@@ -49,6 +49,7 @@ void __start(void)
    /* Ecriture de la valeur 5 sur l'entrée du port A
     * puis lecture de cette valeur.
     */
+#if 0
    volatile uint32_t* p = (uint32_t*) 0x40020000;//addr base port A (MODER)
    *p = 0x00000000; // mode input
    p += 5; //base+5 = registre ODR (Output Data Register)
@@ -63,4 +64,18 @@ void __start(void)
    *p = (uint32_t) 0b0101010101010111; // erreur sur le 2ème bit
    p += 5;
    q = *p; // valeur attendu != 5
+#endif
+   /* 
+    * Tests utilisant la lib externe
+    */
+   /* Initialize a pin init structure containing pins, mode, pupd,
+    * speed, otype and af.
+    */
+   gpio_init_t struct_init;
+   GPIO_StructInit(&struct_init);
+    
+   // Initialize a GPIO port with all its register
+   gpio_t* gpio_a = GPIOA;
+   GPIO_Init(gpio_a, &struct_init);
+   uint16_t pin_state = GPIO_GetPins(gpio_a);
 }
