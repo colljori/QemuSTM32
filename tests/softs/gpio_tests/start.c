@@ -77,5 +77,8 @@ void __start(void)
    // Initialize a GPIO port with all its register
    gpio_t* gpio_a = GPIOA;
    GPIO_Init(gpio_a, &struct_init);
+   GPIO_SetPins(gpio_a, GPIO_P0);
+   GPIO_SetMode(gpio_a, GPIO_P0, 1);
+
    uint16_t pin_state = GPIO_GetPins(gpio_a);
 }
