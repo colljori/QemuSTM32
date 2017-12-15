@@ -1,0 +1,3 @@
+Compile: main.cpp
+/home/chigotc/Desktop/3A/projet/QemuSTM32/tests/mbed_softs/STM32_Print_PC/Makefile:367: recipe for target 'main.o' failed
+Makefile:25: recipe for target 'all' failed
