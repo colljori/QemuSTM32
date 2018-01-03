@@ -39,7 +39,7 @@ VPATH = ..
 ###############################################################################
 # Project settings
 
-PROJECT := project_name # TO CHANGE WHEN CREATING A NEW PROJECT 
+PROJECT := test # can be changed to add a custom name 
 
 
 # Project settings
