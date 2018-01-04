@@ -13,7 +13,7 @@ else
     RM = '$(SHELL)' -c "rm -rf \"$(1)\""
 endif
 
-OBJDIR := BUILD
+OBJDIR := OBJDIR
 # Move to the build directory
 ifeq (,$(filter $(OBJDIR),$(notdir $(CURDIR))))
 .SUFFIXES:
@@ -46,7 +46,7 @@ PROJECT := mbed-dev
 ###############################################################################
 # Objects and Paths
 
-OBJECTS += main.o
+# OBJECTS += main.o
 OBJECTS += drivers/AnalogIn.o
 OBJECTS += drivers/BusIn.o
 OBJECTS += drivers/BusInOut.o
@@ -245,9 +245,9 @@ LINKER_SCRIPT ?= ../targets/TARGET_STM/TARGET_STM32F4/TARGET_STM32F401xE/device/
 ###############################################################################
 # Tools and Flags
 
-AS      = 'arm-none-eabi-gcc' '-g' '-x' 'assembler-with-cpp' '-c' '-Wall' '-Wextra' '-Wno-unused-parameter' '-Wno-missing-field-initializers' '-fmessage-length=0' '-fno-exceptions' '-fno-builtin' '-ffunction-sections' '-fdata-sections' '-funsigned-char' '-MMD' '-fno-delete-null-pointer-checks' '-fomit-frame-pointer' '-Os' '-mcpu=cortex-m4' '-mthumb' '-mfloat-abi=soft'
-CC      = 'arm-none-eabi-gcc' '-g' '-std=gnu99' '-c' '-Wall' '-Wextra' '-Wno-unused-parameter' '-Wno-missing-field-initializers' '-fmessage-length=0' '-fno-exceptions' '-fno-builtin' '-ffunction-sections' '-fdata-sections' '-funsigned-char' '-MMD' '-fno-delete-null-pointer-checks' '-fomit-frame-pointer' '-Os' '-mcpu=cortex-m4' '-mthumb' '-mfloat-abi=soft'
-CPP     = 'arm-none-eabi-g++' '-g' '-std=gnu++98' '-fno-rtti' '-Wvla' '-c' '-Wall' '-Wextra' '-Wno-unused-parameter' '-Wno-missing-field-initializers' '-fmessage-length=0' '-fno-exceptions' '-fno-builtin' '-ffunction-sections' '-fdata-sections' '-funsigned-char' '-MMD' '-fno-delete-null-pointer-checks' '-fomit-frame-pointer' '-Os' '-mcpu=cortex-m4' '-mthumb' '-mfloat-abi=soft'
+AS      = 'arm-none-eabi-gcc' '-g' '-x' 'assembler-with-cpp' '-c' '-Wall' '-Wextra' '-Wno-unused-parameter' '-Wno-missing-field-initializers' '-fmessage-length=0' '-fno-exceptions' '-fno-builtin' '-ffunction-sections' '-fdata-sections' '-funsigned-char' '-MMD' '-fno-delete-null-pointer-checks' '-fomit-frame-pointer'  '-mcpu=cortex-m4' '-mthumb' '-mfloat-abi=soft'
+CC      = 'arm-none-eabi-gcc' '-g' '-std=gnu99' '-c' '-Wall' '-Wextra' '-Wno-unused-parameter' '-Wno-missing-field-initializers' '-fmessage-length=0' '-fno-exceptions' '-fno-builtin' '-ffunction-sections' '-fdata-sections' '-funsigned-char' '-MMD' '-fno-delete-null-pointer-checks' '-fomit-frame-pointer'  '-mcpu=cortex-m4' '-mthumb' '-mfloat-abi=soft'
+CPP     = 'arm-none-eabi-g++' '-g' '-std=gnu++98' '-fno-rtti' '-Wvla' '-c' '-Wall' '-Wextra' '-Wno-unused-parameter' '-Wno-missing-field-initializers' '-fmessage-length=0' '-fno-exceptions' '-fno-builtin' '-ffunction-sections' '-fdata-sections' '-funsigned-char' '-MMD' '-fno-delete-null-pointer-checks' '-fomit-frame-pointer' '-mcpu=cortex-m4' '-mthumb' '-mfloat-abi=soft'
 LD      = 'arm-none-eabi-gcc'
 ELF2BIN = 'arm-none-eabi-objcopy'
 PREPROC = 'arm-none-eabi-cpp' '-E' '-P' '-Wl,--gc-sections' '-Wl,--wrap,main' '-Wl,--wrap,_malloc_r' '-Wl,--wrap,_free_r' '-Wl,--wrap,_realloc_r' '-Wl,--wrap,_memalign_r' '-Wl,--wrap,_calloc_r' '-Wl,--wrap,exit' '-Wl,--wrap,atexit' '-Wl,-n' '-mcpu=cortex-m4' '-mthumb' '-mfloat-abi=soft'
@@ -388,7 +388,7 @@ ASM_FLAGS += -Itargets/TARGET_STM/TARGET_STM32F4/TARGET_STM32F401xE/device/TOOLC
 ASM_FLAGS += -Itargets/TARGET_STM/TARGET_STM32F4/device
 
 
-LD_FLAGS :=-Wl,--gc-sections -Wl,--wrap,main -Wl,--wrap,_malloc_r -Wl,--wrap,_free_r -Wl,--wrap,_realloc_r -Wl,--wrap,_memalign_r -Wl,--wrap,_calloc_r -Wl,--wrap,exit -Wl,--wrap,atexit -Wl,-n -mcpu=cortex-m4 -mthumb -mfpu=fpv4-sp-d16 -mfloat-abi=softfp 
+LD_FLAGS :=-Wl,--gc-sections -Wl,--wrap,main -Wl,--wrap,_malloc_r -Wl,--wrap,_free_r -Wl,--wrap,_realloc_r -Wl,--wrap,_memalign_r -Wl,--wrap,_calloc_r -Wl,--wrap,exit -Wl,--wrap,atexit -Wl,-n -mcpu=cortex-m4 -mthumb -mfloat-abi=soft
 LD_SYS_LIBS :=-Wl,--start-group -lstdc++ -lsupc++ -lm -lc -lgcc -lnosys  -Wl,--end-group
 
 # Tools and Flags

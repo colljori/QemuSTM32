@@ -1,11 +1,12 @@
 #include "mbed.h"
 
+DigitalOut myled(LED1);
 
 int main() {
     while(1) {
-        wait(0.3); // 200 ms
-		int *p = (int*)0x2000E000;
-		*p = 0xDEADCE11; 
+        myled = 1; // LED is ON
+        wait(0.2); // 200 ms
+        myled = 0; // LED is OFF
         wait(1.0); // 1 sec
     }
 }
