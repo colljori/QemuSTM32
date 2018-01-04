@@ -39,14 +39,15 @@ VPATH = ..
 ###############################################################################
 # Project settings
 
-PROJECT := test # can be changed to add a custom name 
-
+# Name of .bin and .elf 
+PROJECT = test
 
 # Project settings
 ###############################################################################
 # Objects and Paths
 
-MBEDDIR = ../mbed-dev # Path to mbed sources and objects files. 
+# Path to mbed sources and objects files.
+MBEDDIR := ../mbed-dev
 
 OBJECTS += main.o
 OBJECTS += $(MBEDDIR)/drivers/AnalogIn.o
