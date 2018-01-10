@@ -5,10 +5,11 @@
  *      Author: Tomek
  */
 
-#include <stm32l.h>
 
 #ifndef STM32L_DMA_H_
 #define STM32L_DMA_H_
+
+#include <stm32l.h>
 
 /* registers bases */
 #define DMA1_BASE							0x40026000
@@ -257,4 +258,3 @@ int DMA_GetTransferNumber(dma_chan_t *DMAx);
 void DMA_ClearFlag(uint32_t dma_flag);
 
 #endif
-
