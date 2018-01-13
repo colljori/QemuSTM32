@@ -10,13 +10,13 @@ and in an other terminal in your test folder:
 ```
 arm-none-eabi-gdb NAME.elf -ex "tar rem :1234"
 ```
-If you use tests with mbed, you must add to the previous command : `-ex "cd ../mbed-dev/OBJDIR"` in order to access debug information in .c and .cpp files. It's easier if you are in the root of your test and not in BUILD folder. 
+If you use tests with mbed, you may add to the previous command : `-ex "cd ../mbed-dev/OBJDIR"` in order to access debug information in .c and .cpp files. It's not mandatory but sometimes gdb don't find debug informations. 
 
 ## Test with board
 
 To launch a test on the Nucleo board, you must install "st-link" which provides "st-util" binary. This binary allows you to connect gdb to the board. 
 
-To add a test on the board, you just have to copy the test binary on the board root. 
+To add a test on the board, `st-flash write path_to_test/test.bin 0x08000000 `
 
 
 ## Different folders 
