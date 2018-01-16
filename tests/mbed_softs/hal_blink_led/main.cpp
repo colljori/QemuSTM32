@@ -15,6 +15,7 @@
 
 /* Global variable used by hal macro and functions */ 
 TIM_HandleTypeDef htim3;
+GPIO_InitTypeDef GPIO_Init;
 
 /* Redefine IRQ Handler */
 extern "C"
@@ -57,13 +58,12 @@ int main() {
 	HAL_TIM_Base_Init(&htim3);
 	HAL_TIM_Base_Start(&htim3); 
 
-    GPIO_InitTypeDef GPIO_Init;
     GPIO_Init.Pin = pin;
     GPIO_Init.Mode = GPIO_MODE_OUTPUT_PP;
     GPIO_Init.Pull = GPIO_NOPULL;
     GPIO_Init.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
-    GPIO_TypeDef GPIO_D;
-    HAL_GPIO_Init(&GPIO_D, &GPIO_Init);
+    GPIO_TypeDef gpio_d;
+    HAL_GPIO_Init(&gpio_d, &GPIO_Init);
 
 	/* Set NVIC Interruptions 
 	 * NOTE : NVIC_SetVector(TIM3_IRQn, My_TIM3_IRQHandler);
@@ -74,6 +74,6 @@ int main() {
 	/* Enable components interrupts generation */
 	__HAL_TIM_ENABLE_IT(&htim3, TIM_IT_UPDATE);
 
-    HAL_GPIO_WritePin(&GPIO_D, pin, GPIO_PIN_SET); 
+    HAL_GPIO_WritePin(&gpio_d, pin, GPIO_PIN_SET); 
 }
 
