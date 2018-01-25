@@ -11,17 +11,17 @@
 /* Global variable used by hal macro and functions */ 
 TIM_HandleTypeDef htim3;
 GPIO_InitTypeDef ledInit;
-#define LED_GREEN GPIO_PIN_5
+GPIO_InitTypeDef buttonInit; 
+#define LED_GREEN GPIO_PIN_5 // GPIOA
+#define BUTTON GPIO_PIN_13 // GPIOC
 
-/* Redefine IRQ Handler */
 extern "C"
-void TIM3_IRQHandler(void) {
-	if (__HAL_TIM_GET_FLAG(&htim3, TIM_FLAG_UPDATE) == SET) {
-		__HAL_TIM_CLEAR_FLAG(&htim3, TIM_FLAG_UPDATE);
-		HAL_GPIO_TogglePin(GPIOA, LED_GREEN); 
-	}
+void EXTI15_10_IRQHandler(void){
+  if(READ_BIT(EXTI->PR, 1 << 13)){	
+	WRITE_REG(EXTI->PR, 1 << 13);
+	HAL_GPIO_TogglePin(GPIOA, LED_GREEN); 
+  }
 }
-
 
 /* Main function */
 int main() {
@@ -38,19 +38,12 @@ int main() {
 	 */
 	__HAL_RCC_TIM3_CLK_ENABLE();
     __HAL_RCC_GPIOA_CLK_ENABLE();
+    __HAL_RCC_GPIOC_CLK_ENABLE();
+    __HAL_RCC_SYSCFG_CLK_ENABLE();
 
 	/* Component initialization
 	 * NOTE : search for functions and macro in stm32f4xx_hal_* inside "target" folder 
 	 */
-
-	// Init TIM3
-	htim3.Instance = TIM3; 
-	htim3.Init.Period = 0xFFFF; //ARR
-	htim3.Init.Prescaler = 0x0100; // PSC
-	htim3.Init.ClockDivision = 0;
-	htim3.Init.CounterMode = TIM_COUNTERMODE_UP;
-	HAL_TIM_Base_Init(&htim3);
-	HAL_TIM_Base_Start(&htim3); 
 
 	// Init LED
     ledInit.Pin = LED_GREEN;
@@ -59,16 +52,33 @@ int main() {
     ledInit.Speed = GPIO_SPEED_FREQ_MEDIUM;
     HAL_GPIO_Init(GPIOA, &ledInit);
 
-	/* Set NVIC Interruptions 
+	// Init LED
+    buttonInit.Pin = BUTTON; 
+    buttonInit.Mode = GPIO_MODE_INPUT; 
+    buttonInit.Pull = GPIO_NOPULL;
+    buttonInit.Speed = GPIO_SPEED_FREQ_HIGH;
+    HAL_GPIO_Init(GPIOC, &buttonInit);
+	
+	// Enable Interrupt button
+	uint32_t temp = 0;
+	uint32_t pin_index = POSITION_VAL(BUTTON); 
+	temp = SYSCFG->EXTICR[pin_index >> 2];
+	CLEAR_BIT(temp, (0x0FU) << (4U * (pin_index & 0x03U)));
+	SET_BIT(temp, 2 << (4U * (pin_index & 0x03U)));// 2 = GPIOC 
+	SYSCFG->EXTICR[pin_index >> 2] = temp;
+
+
+	WRITE_REG(EXTI->IMR, 1<< pin_index);
+	SET_BIT(EXTI->RTSR, 1<<pin_index);
+	//SET_BIT(EXTI->FTSR, 1<<pin_index);
+
+
+	/* Set NVIC Interruptions
 	 * NOTE : NVIC_SetVector(TIM3_IRQn, My_TIM3_IRQHandler);
 	 *  can be used with a personnal IRQ Handler instead of redefine TIM3_IRQHandler
 	 */
-	NVIC_EnableIRQ(TIM3_IRQn); 	  
-
-	/* Enable components interrupts generation */
-	__HAL_TIM_ENABLE_IT(&htim3, TIM_IT_UPDATE);
-
-	// Turn on led
+	NVIC_EnableIRQ(EXTI15_10_IRQn); 
     HAL_GPIO_WritePin(GPIOA, LED_GREEN, GPIO_PIN_SET); 
+
 }
 
