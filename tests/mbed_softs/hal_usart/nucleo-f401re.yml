@@ -1,0 +1,253 @@
+platforms:
+  nucleo-f401re:
+    description: Affordable and flexible platform to ease prototyping using a STM32F401RET6 microcontroller, according to the salesman :-)
+
+    components:
+      mem-bus:
+        type: simple-bus
+
+      cpu:
+        type: cpu-arm-cortex-m4
+        bindings:
+          mem: mem-bus
+          nvic-link: nvic.link
+
+      nvic:
+        type: arm-nvic
+        num-irq: 52 # According to page 201 of DocID025350 Rev 4
+        bindings:
+          mem:
+            peer: mem-bus
+            address: { 0xe000e000: 0x1000 }
+          irq-out: cpu.irq
+
+      # stub to prevent bus error when exiting an irq
+      irq-mem:
+        type: stub
+        bindings:
+          mem:
+            peer: mem-bus
+            address: { 0xfffffff0: 0x10}
+
+      # stub to prevent bus error when mbed use RCC aliased regions
+      alias-rcc-mem:
+        type: stub
+        bindings:
+          mem:
+            peer: mem-bus
+            address: { 0x42470000: 0x100}
+
+      # DBGMCU stup
+      dbgmcu:
+        type: stub
+        bindings:
+          mem:
+            peer: mem-bus
+            address: { 0xE0042000: 0x1000 }
+
+      usart1:
+        type: uart-usart
+        fclk: 84000000    #usart 1 is on APB2, f=84Mhz
+        bindings:
+          mem:
+            peer: mem-bus
+            address: { 0x40011000: 0x1C }
+          irq: nvic.irq37
+          usart-tx:   usart1-tester.usart-rx
+          usart-rx:   usart1-tester.usart-tx
+          usart-sclk: usart1-tester.usart-sclk
+
+
+      usart1-tester:
+        type: uart-usart-tester
+        sampling_time: 13017  #approximately sampling time for 9600. Sampling method should work well even with shifting in sampling time calculation
+        M: 0
+        OVER8: 1
+        stop_bit: 2
+        PCE: 0
+        PS: 0
+
+      usart2:
+        type: uart-usart
+        bindings:
+          mem:
+            peer: mem-bus
+            address: { 0x40004400: 0x1C }
+          irq: nvic.irq38
+          usart-tx:   usart2-tester.usart-rx
+          usart-rx:   usart2-tester.usart-tx
+          usart-sclk: usart2-tester.usart-sclk
+
+
+      usart2-tester:
+        type: uart-usart-tester
+        sampling_time: 13041
+        M: 0
+        OVER8: 1
+        stop_bit: 2
+        PCE: 0
+        PS: 0
+
+
+
+
+      #
+      # usart6:
+      #   type: uart-pl011
+      #   bindings:
+      #     mem:
+      #       peer: bus
+      #       address: { 0x40011400: 0x400 }
+      #     irq: cpu.irq.irq71
+
+      flash-native:
+        type: memory
+        size: &flash_size 512K
+        bindings:
+          mem:
+            peer: mem-bus
+            address: { &flash_start 0x08000000 : *flash_size }
+        readonly: true
+
+
+      # Flash memory for flash boot mode. MUST BE THE SAME THAN FLASH-NATIVE ( identic file-blob )
+      flash-boot:
+        type: memory
+        size: *flash_size
+        bindings:
+          mem:
+            peer: mem-bus
+            address: { 0x0000000: *flash_size }
+        readonly: true
+
+
+
+      # Flash-interface Stub
+      flash-interface:
+        type: stub
+        size: &flash_interface_size 1K
+        bindings:
+          mem:
+            peer: mem-bus
+            address: { 0x40023C00: *flash_interface_size }
+
+
+      RCC:
+        type: nucleo-rcc
+        bindings:
+          mem:
+            peer: mem-bus
+            address: { 0x40023800: 0x400 }
+
+
+      # PWR stub
+      PWR:
+        type: stub
+        size: &PWR_size 1K
+        bindings:
+          mem:
+            peer: mem-bus
+            address: { 0x40007000: *PWR_size }
+
+
+      sram:
+        type: memory
+        size: &sram_size 96K
+        bindings:
+          mem:
+            peer: mem-bus
+            address: { &sram_start 0x20000000: *sram_size }
+
+
+      ## TIMERS
+      tim-2:
+       type: nucleo-timer
+       timer-size: 32
+       bindings:
+         mem:
+           peer: mem-bus
+           address: { 0x40000000: 0x400 }
+         irq: nvic.irq28
+
+      tim-3:
+       type: nucleo-timer
+       bindings:
+         mem:
+           peer: mem-bus
+           address: { 0x40000400: 0x400 }
+         irq: nvic.irq29
+
+      tim-4:
+       type: nucleo-timer
+       bindings:
+         mem:
+           peer: mem-bus
+           address: { 0x40000800: 0x400 }
+         irq: nvic.irq30
+
+      tim-5:
+       type: nucleo-timer
+       timer-size: 32
+       bindings:
+         mem:
+           peer: mem-bus
+           address: { 0x40000C00: 0x400 }
+         irq: nvic.irq50
+
+
+
+      syscfg:
+        type: nucleo-syscfg
+        bindings:
+          mem:
+            peer: mem-bus
+            address: { 0x40013800: 0x400}
+
+
+      gpio-a:
+        type: rm0368-gpio
+        moder: 0x0C000000
+        ospeedr: 0x0C000000
+        pupdr: 0x64000000
+        bindings:
+          mem:
+            peer: mem-bus
+            address: { 0x40020000: 0x400 }
+
+      gpio-b:
+        type: rm0368-gpio
+        moder: 0x00000280
+        ospeedr: 0x000000C0
+        pupdr: 0x00000100
+        bindings:
+          mem:
+            peer: mem-bus
+            address: { 0x40020400: 0x400 }
+
+      gpio-c:
+        type: rm0368-gpio
+        bindings:
+          mem:
+            peer: mem-bus
+            address: { 0x40020800: 0x400 }
+
+      gpio-d:
+        type: rm0368-gpio
+        bindings:
+          mem:
+            peer: mem-bus
+            address: { 0x40020C00: 0x400 }
+
+      gpio-e:
+        type: rm0368-gpio
+        bindings:
+          mem:
+            peer: mem-bus
+            address: { 0x40021000: 0x400 }
+
+      gpio-h:
+        type: rm0368-gpio
+        bindings:
+          mem:
+            peer: mem-bus
+            address: { 0x40021C00: 0x400 }
