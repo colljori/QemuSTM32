@@ -69,9 +69,9 @@ int main() {
 	usart2.Init.StopBits=USART_STOPBITS_2;
 	usart2.Init.Parity=USART_PARITY_NONE;
 	usart2.Init.Mode=USART_MODE_TX;
-	usart2.Init.CLKPolarity=USART_POLARITY_HIGH;
+	usart2.Init.CLKPolarity=USART_POLARITY_LOW;
 	usart2.Init.CLKPhase=USART_PHASE_2EDGE;
-	usart2.Init.CLKLastBit=USART_LASTBIT_ENABLE;
+	usart2.Init.CLKLastBit=USART_LASTBIT_DISABLE;
 
 	volatile HAL_StatusTypeDef usart2_status = HAL_USART_Init(&usart2);
 
