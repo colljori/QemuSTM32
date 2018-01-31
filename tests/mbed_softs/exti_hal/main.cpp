@@ -23,6 +23,8 @@ void EXTI15_10_IRQHandler(void){
   }
 }
 
+
+
 /* Main function */
 int main() {
 	/* DEBUG OPTION */ 
@@ -52,7 +54,7 @@ int main() {
     ledInit.Speed = GPIO_SPEED_FREQ_MEDIUM;
     HAL_GPIO_Init(GPIOA, &ledInit);
 
-	// Init LED
+	// Init BUTTON 
     buttonInit.Pin = BUTTON; 
     buttonInit.Mode = GPIO_MODE_INPUT; 
     buttonInit.Pull = GPIO_NOPULL;
@@ -67,10 +69,8 @@ int main() {
 	SET_BIT(temp, 2 << (4U * (pin_index & 0x03U)));// 2 = GPIOC 
 	SYSCFG->EXTICR[pin_index >> 2] = temp;
 
-
 	WRITE_REG(EXTI->IMR, 1<< pin_index);
 	SET_BIT(EXTI->RTSR, 1<<pin_index);
-	//SET_BIT(EXTI->FTSR, 1<<pin_index);
 
 
 	/* Set NVIC Interruptions
@@ -78,7 +78,6 @@ int main() {
 	 *  can be used with a personnal IRQ Handler instead of redefine TIM3_IRQHandler
 	 */
 	NVIC_EnableIRQ(EXTI15_10_IRQn); 
-    HAL_GPIO_WritePin(GPIOA, LED_GREEN, GPIO_PIN_SET); 
 
 }
 
